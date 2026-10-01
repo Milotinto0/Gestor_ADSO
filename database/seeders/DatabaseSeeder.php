@@ -3,23 +3,45 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Aprendiz;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        /*
+        |--------------------------------------------------------------------------
+        | Usuarios del sistema (autenticación + roles)
+        |--------------------------------------------------------------------------
+        | Contraseña para los tres: "password"
+        */
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::factory()->administrador()->create([
+            'name'  => 'Admin Principal',
+            'email' => 'admin@gestor.test',
         ]);
+
+        User::factory()->instructor()->create([
+            'name'  => 'Instructor Demo',
+            'email' => 'instructor@gestor.test',
+        ]);
+
+        User::factory()->aprendiz()->create([
+            'name'  => 'Aprendiz Demo',
+            'email' => 'aprendiz@gestor.test',
+        ]);
+
+        // Usuarios extra para llenar la tabla
+        User::factory(5)->instructor()->create();
+        User::factory(10)->aprendiz()->create();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Aprendices (datos del CRUD)
+        |--------------------------------------------------------------------------
+        */
+
+        Aprendiz::factory(50)->create();
     }
 }
