@@ -4,7 +4,7 @@ Aplicación web desarrollada en **Laravel** para la gestión de aprendices con a
 
 ---
 
-## Tabla de contenidos
+## Tabla de contenidos.
 
 - [Requisitos](#requisitos)
 - [Instalación desde cero](#instalación-desde-cero)
