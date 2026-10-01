@@ -9,7 +9,7 @@ class AprendizFactory extends Factory
  'nombre' => $this->faker->name(),
  'documento' => (string) $this->faker->unique()->numerify('##########'),
  'correo' => $this->faker->unique()->safeEmail(),
- 'ficha_id' => $this->faker->optional()->numberBetween(100000, 999999),
+ 'ficha_id'     => $this->faker->numberBetween(1000000, 9999999),
  ];
  }
 }

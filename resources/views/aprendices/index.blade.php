@@ -39,6 +39,7 @@
                         <th>Nombre</th>
                         <th>Documento</th>
                         <th>Correo</th>
+                        <th>Ficha</th>
                         <th class="col-acciones">Acciones</th>
                     </tr>
                 </thead>
@@ -49,8 +50,8 @@
                             <td>{{ $aprendiz->nombre }}</td>
                             <td>{{ $aprendiz->documento }}</td>
                             <td>{{ $aprendiz->correo }}</td>
+                            <td>{{ $aprendiz->ficha_id }}</td>
                             <td class="col-acciones">
-                                <a href="{{ route('aprendices.show', $aprendiz) }}" class="btn-mini btn-ver">Ver</a>
                                 <a href="{{ route('aprendices.edit', $aprendiz) }}" class="btn-mini btn-editar">Editar</a>
                                 <form action="{{ route('aprendices.destroy', $aprendiz) }}"
                                       method="POST"

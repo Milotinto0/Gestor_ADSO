@@ -1,19 +1,20 @@
 @extends('layouts.app')
 @section('title','Nuevo Aprendiz')
 
+
 @section('content')
 <div class="contenedor">
     <h1>Nuevo Aprendiz</h1>
 
     @if ($errors->any())
-        <div class="alerta-errores">
-            <strong>Por favor corrige los siguientes errores:</strong>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alerta-errores">
+        <strong>Por favor corrige los siguientes errores:</strong>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form action="{{ route('aprendices.store') }}" method="POST" class="formulario">
@@ -35,6 +36,15 @@
             <label for="correo">Correo</label>
             <input type="email" id="correo" name="correo" value="{{ old('correo') }}" required>
             @error('correo')<span class="error-campo">{{ $message }}</span>@enderror
+        </div>
+        <div class="campo">
+            <label for="ficha">Ficha</label>
+            <input type="number"
+                id="ficha"
+                name="ficha"
+                value="{{ old('ficha') }}"
+                required>
+            @error('ficha')<span class="error-campo">{{ $message }}</span>@enderror
         </div>
 
         <div class="acciones">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Aprendiz;
+use App\Http\Requests\StoreUpdateAprendizRequest;
 
 class AprendizController extends Controller
 {
@@ -33,33 +34,33 @@ class AprendizController extends Controller
     {
         return view('aprendices.create');
     }
-    public function store(Request $request)
+    public function store(StoreUpdateAprendizRequest $request)
     {
-        // Validación mínima (simulación de guardado)
-        $data = $request->validate([
-            'nombre' => ['required', 'string', 'max:120'],
-            'documento' => ['required', 'string', 'max:40'],
-            'correo' => ['required', 'email', 'max:120'],
-        ]);
-        // Aquí NO guardamos en BD (lo haremos en Semana 4 con Eloquent).
-        // Objetivo Semana 2: comprobar flujo ruta ³ acción ³ vista ³ redirect.
-        return redirect()->route('aprendices.index')
-            ->with('ok', 'Aprendiz recibido (simulado)');
+        Aprendiz::create($request->validated());
+
+        return redirect()
+            ->route('aprendices.index')
+            ->with('ok', 'Aprendiz creado correctamente.');
     }
-    public function show($id)
+    public function edit(Aprendiz $aprendiz)
     {
-        abort(404);
-    } // no usado en S2
-    public function edit($id)
+        return view(
+            'aprendices.edit',
+            compact('aprendiz')
+        );
+    }
+    public function update(StoreUpdateAprendizRequest $request, Aprendiz $aprendiz)
     {
-        abort(404);
-    } // no usado en S2
-    public function update(Request $r, $id)
+        $aprendiz->update($request->validated());
+        return redirect()
+            ->route('aprendices.index')
+            ->with('ok', 'Aprendiz actualizado');
+    }
+    public function destroy(Aprendiz $aprendiz)
     {
-        abort(404);
-    } // no usado en S2
-    public function destroy($id)
-    {
-        abort(404);
-    } // no usado en S2
+        $aprendiz->delete();
+        return redirect()
+            ->route('aprendices.index')
+            ->with('ok', 'Aprendiz eliminado');
+    }
 }
