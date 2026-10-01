@@ -1,7 +1,80 @@
 @extends('layouts.app')
 @section('title','Aprendices')
+
 @section('content')
-<h1>Aprendices</h1>
-<p>Listado vacío temporal (Semana 2). En la Semana 4 se conectará a BD con Eloquent.</p>
-<p><a href="{{ route('aprendices.create') }}">+ Nuevo</a></p>
+<div class="contenedor">
+    <div class="encabezado">
+        <h1>Aprendices</h1>
+        <a href="{{ route('aprendices.create') }}" class="btn-primario btn-nuevo">+ Nuevo</a>
+    </div>
+
+    {{-- Formulario de filtros --}}
+    <form action="{{ route('aprendices.index') }}" method="GET" class="formulario-filtros">
+        <div class="campo">
+            <label for="nombre">Buscar por nombre</label>
+            <input type="text" id="nombre" name="nombre"
+                   value="{{ request('nombre') }}" placeholder="Ej: Juan">
+        </div>
+
+        <div class="campo">
+            <label for="correo">Buscar por correo</label>
+            <input type="text" id="correo" name="correo"
+                   value="{{ request('correo') }}" placeholder="Ej: ejemplo@correo.com">
+        </div>
+
+        <div class="acciones-filtros">
+            <button type="submit" class="btn-primario">Filtrar</button>
+            <a href="{{ route('aprendices.index') }}" class="btn-cancelar">Limpiar</a>
+        </div>
+    </form>
+
+    @if ($aprendices->isEmpty())
+        <p class="sin-resultados">No se encontraron aprendices con esos criterios.</p>
+    @else
+        <div class="tabla-wrap">
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th class="col-id">#</th>
+                        <th>Nombre</th>
+                        <th>Documento</th>
+                        <th>Correo</th>
+                        <th class="col-acciones">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($aprendices as $aprendiz)
+                        <tr>
+                            <td class="col-id">{{ $aprendiz->id }}</td>
+                            <td>{{ $aprendiz->nombre }}</td>
+                            <td>{{ $aprendiz->documento }}</td>
+                            <td>{{ $aprendiz->correo }}</td>
+                            <td class="col-acciones">
+                                <a href="{{ route('aprendices.show', $aprendiz) }}" class="btn-mini btn-ver">Ver</a>
+                                <a href="{{ route('aprendices.edit', $aprendiz) }}" class="btn-mini btn-editar">Editar</a>
+                                <form action="{{ route('aprendices.destroy', $aprendiz) }}"
+                                      method="POST"
+                                      class="form-inline"
+                                      onsubmit="return confirm('¿Seguro que deseas eliminar este aprendiz?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-mini btn-peligro">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class="paginacion">
+            {{ $aprendices->links() }}
+        </div>
+
+        <p class="resumen">
+            Mostrando {{ $aprendices->firstItem() }}–{{ $aprendices->lastItem() }}
+            de {{ $aprendices->total() }} aprendices.
+        </p>
+    @endif
+</div>
 @endsection
