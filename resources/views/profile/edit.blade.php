@@ -14,9 +14,11 @@
             @include('profile.partials.update-password-form')
         </div>
 
+        @if ($user->role !== 'administrador')
         <div class="perfil-card perfil-peligro">
             @include('profile.partials.delete-user-form')
         </div>
+        @endif
     </div>
 </div>
 @endsection

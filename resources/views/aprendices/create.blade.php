@@ -38,11 +38,11 @@
             @error('correo')<span class="error-campo">{{ $message }}</span>@enderror
         </div>
         <div class="campo">
-            <label for="ficha">Ficha</label>
+            <label for="ficha_id">Ficha</label>
             <input type="number"
-                id="ficha"
-                name="ficha"
-                value="{{ old('ficha') }}"
+                id="ficha_id"
+                name="ficha_id"
+                value="{{ old('ficha_id') }}"
                 required>
             @error('ficha')<span class="error-campo">{{ $message }}</span>@enderror
         </div>

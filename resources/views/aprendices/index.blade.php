@@ -5,7 +5,9 @@
 <div class="contenedor">
     <div class="encabezado">
         <h1>Aprendices</h1>
-        <a href="{{ route('aprendices.create') }}" class="btn-primario btn-nuevo">+ Nuevo</a>
+        @can('create', App\Models\Aprendiz::class)
+            <a href="{{ route('aprendices.create') }}" class="btn-primario btn-nuevo">+ Nuevo</a>
+        @endcan
     </div>
 
     {{-- Formulario de filtros --}}
@@ -40,7 +42,9 @@
                         <th>Documento</th>
                         <th>Correo</th>
                         <th>Ficha</th>
-                        <th class="col-acciones">Acciones</th>
+                        @can('create', App\Models\Aprendiz::class)
+                            <th class="col-acciones">Acciones</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -51,17 +55,25 @@
                             <td>{{ $aprendiz->documento }}</td>
                             <td>{{ $aprendiz->correo }}</td>
                             <td>{{ $aprendiz->ficha_id }}</td>
-                            <td class="col-acciones">
-                                <a href="{{ route('aprendices.edit', $aprendiz) }}" class="btn-mini btn-editar">Editar</a>
-                                <form action="{{ route('aprendices.destroy', $aprendiz) }}"
-                                      method="POST"
-                                      class="form-inline"
-                                      onsubmit="return confirm('¿Seguro que deseas eliminar este aprendiz?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-mini btn-peligro">Eliminar</button>
-                                </form>
-                            </td>
+
+                            @can('create', App\Models\Aprendiz::class)
+                                <td class="col-acciones">
+                                    @can('update', $aprendiz)
+                                        <a href="{{ route('aprendices.edit', $aprendiz) }}" class="btn-mini btn-editar">Editar</a>
+                                    @endcan
+
+                                    @can('delete', $aprendiz)
+                                        <form action="{{ route('aprendices.destroy', $aprendiz) }}"
+                                              method="POST"
+                                              class="form-inline"
+                                              onsubmit="return confirm('¿Seguro que deseas eliminar a {{ $aprendiz->nombre }}?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-mini btn-peligro">Eliminar</button>
+                                        </form>
+                                    @endcan
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 </tbody>

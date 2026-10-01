@@ -444,7 +444,7 @@
         .formulario-filtros {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr auto;
-            gap: 1.25rem;
+            gap: 1rem;
             align-items: end;
             padding: 1.25rem 1.5rem;
             background-color: var(--azul-claro);
@@ -453,31 +453,59 @@
             margin-bottom: 1.75rem;
         }
 
+        /* ✅ Clave: permite que las columnas se encojan */
+        .formulario-filtros>* {
+            min-width: 0;
+        }
+
         .formulario-filtros .campo {
             margin-bottom: 0;
         }
 
+        .formulario-filtros .campo input,
+        .formulario-filtros .campo select {
+            width: 100%;
+        }
+
         .acciones-filtros {
             display: flex;
-            gap: 0.85rem;
+            gap: 0.65rem;
             padding-bottom: 1px;
+            flex-shrink: 0;
         }
 
         .acciones-filtros .btn-primario,
         .acciones-filtros .btn-cancelar {
             flex: 0 0 auto;
-            padding: 0.65rem 1.4rem;
+            padding: 0.65rem 1.1rem;
             font-size: 0.9rem;
-            min-width: 105px;
+            min-width: 90px;
+            white-space: nowrap;
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 900px) {
+            .formulario-filtros {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .acciones-filtros {
+                grid-column: 1 / -1;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 560px) {
             .formulario-filtros {
                 grid-template-columns: 1fr;
             }
 
             .acciones-filtros {
-                justify-content: flex-end;
+                justify-content: stretch;
+            }
+
+            .acciones-filtros .btn-primario,
+            .acciones-filtros .btn-cancelar {
+                flex: 1;
             }
         }
 
@@ -753,6 +781,25 @@
             font-size: 0.9rem;
             color: #6b7c8c;
         }
+
+        .campo select {
+            padding: 0.65rem 0.85rem;
+            border: 1px solid var(--azul-borde);
+            border-radius: 8px;
+            background-color: var(--azul-claro);
+            color: var(--texto);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .campo select:focus {
+            outline: none;
+            border-color: var(--azul-acento);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.15);
+        }
     </style>
 </head>
 
@@ -774,6 +821,13 @@
                     class="{{ request()->routeIs('aprendices.*') ? 'activo' : '' }}">
                     Aprendices
                 </a>
+
+                @can('viewAny', App\Models\User::class)
+                <a href="{{ route('users.index') }}"
+                    class="{{ request()->routeIs('users.*') ? 'activo' : '' }}">
+                    Usuarios
+                </a>
+                @endcan
                 @auth
                 <a href="{{ route('dashboard') }}"
                     class="{{ request()->routeIs('dashboard') ? 'activo' : '' }}">

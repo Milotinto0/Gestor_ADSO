@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -21,4 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+    protected $policies = [
+        \App\Models\Aprendiz::class => \App\Policies\AprendizPolicy::class,
+    ];
 }

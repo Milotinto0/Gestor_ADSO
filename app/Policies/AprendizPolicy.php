@@ -2,65 +2,52 @@
 
 namespace App\Policies;
 
-use App\Models\Aprendiz;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Aprendiz;
 
 class AprendizPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     public function viewAny(User $user): bool
     {
-        return false;
+        return in_array($user->role, ['administrador', 'instructor', 'aprendiz']);
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Aprendiz $aprendiz): bool
     {
-        return false;
+        return in_array($user->role, ['administrador', 'instructor', 'aprendiz']);
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
-        return false;
+        return in_array($user->role, ['administrador', 'instructor']);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Aprendiz $aprendiz): bool
     {
-        return false;
+        return in_array($user->role, ['administrador', 'instructor']);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Aprendiz $aprendiz): bool
     {
-        return false;
-    }
+        // Solo admin
+        if ($user->role !== 'administrador') {
+            return false;
+        }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Aprendiz $aprendiz): bool
-    {
-        return false;
-    }
+        // No autoeliminarse
+        if (strtolower($aprendiz->correo) === strtolower($user->email)) {
+            return false;
+        }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Aprendiz $aprendiz): bool
-    {
-        return false;
+        // No eliminar a otro administrador
+        $esAdmin = User::where('email', $aprendiz->correo)
+                       ->where('role', 'administrador')
+                       ->exists();
+
+        if ($esAdmin) {
+            return false;
+        }
+
+        return true;
     }
 }
